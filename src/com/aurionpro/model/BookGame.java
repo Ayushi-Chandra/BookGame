@@ -3,46 +3,73 @@ package com.aurionpro.model;
 import java.util.Random;
 
 public class BookGame {
-	public static void main(String[] args) {
-		Random random = new Random();
-		int bookPages = 300;
+    private String player1Name;
+    private String player2Name;
+    private int player1Score;
+    private int player2Score;
+    private int currentPlayer;
 
-		// Player 1's turn
-		int player1Page = random.nextInt(bookPages) + 1;
-		int player1Score = player1Page % 7;
+    public BookGame(String player1Name, String player2Name) {
+        this.player1Name = player1Name;
+        this.player2Name = player2Name;
+        this.currentPlayer = 1; 
+    }
 
-		while (player1Score != 0) {
-			player1Page++;
-			player1Score = player1Page % 7;
-		}
+    public int getPlayer1Page() {
+        Random random = new Random();
+        int player1Page = random.nextInt(301);
+        int player1Score = player1Page % 7;
 
-		System.out.println("Player 1 Page: " + player1Page);
-		System.out.println("Player 1 Score: " + player1Score);
+        while (player1Score != 0) {
+            player1Page++;
+            player1Score = player1Page % 7;
+        }
 
-		// Player 2's turn
-		int player2Score = random.nextInt(7); // Player 2's score is between 0 and 6
+        return player1Page;
+    }
 
-		// Check for a tie
-		if (player2Score == player1Score) {
-			System.out.println("It's a tie!");
-			return;
-		}
+    public int getPlayer2Score() {
+        Random random = new Random();
+        int player2Page = random.nextInt(301);
+        int player2Score = player2Page % 7;
 
-		int player2Turns = 1;
+        while (player2Score != 0) {
+            player2Page++;
+            player2Score = player2Page % 7;
+        }
 
-		while (player2Score < player1Score) {
-			player2Score += random.nextInt(7);
-			player2Turns++;
-		}
+        return player2Page; // Return the calculated page number
+    }
 
-		System.out.println("Player 2 Score: " + player2Score);
-		System.out.println("Player 2 Turns: " + player2Turns);
 
-		// Determine the winner
-		if (player2Score > player1Score) {
-			System.out.println("Player 2 wins!");
-		} else {
-			System.out.println("Player 1 wins!");
-		}
-	}
+    public void updatePlayerScore(int player, int score) {
+        if (player == 1) {
+            player1Score += score;
+        } else {
+            player2Score += score;
+        }
+    }
+
+    public void displayScore(int player) {
+        int score = (player == 1) ? player1Score : player2Score;
+        System.out.println("Score: " + score);
+    }
+
+    public boolean isGameOver() {
+        return player1Score >= 50 || player2Score >= 50;
+    }
+
+    public int determineWinner() {
+        if (player1Score == player2Score) {
+            return 0;
+        } else if (player1Score > player2Score) {
+            return 1; 
+        } else {
+            return 2; 
+        }
+    }
+
+    public int getPlayerScore(int player) {
+        return (player == 1) ? player1Score : player2Score;
+    }
 }
